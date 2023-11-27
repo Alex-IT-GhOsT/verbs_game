@@ -50,15 +50,9 @@ app.get('/', (req, res) => {
 })
 
 app.get('/api/date', async (req,res) => {
-  await Verb.find({}, (err, data) => {
-    if (err) {
-      console.log(err)
-      res.status(500).json({error : 'erroe'})
-    } else {
-      console.log(data)
-      res.json(data)
-    }
-  }) 
+  const date = await Verb.find({})
+  res.json(date)
+    
  
 })
 
