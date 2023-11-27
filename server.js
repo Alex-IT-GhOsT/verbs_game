@@ -4,7 +4,8 @@ import bodyParser from 'body-parser';
 import mongoose from 'mongoose';
 import Verb from './mongoDB/verbs.js';
 import By from './worlds/by.js';
-import cors from 'cors'
+import cors from 'cors';
+import UserForm from './mongoDB/users.js';
 
 const app = express();
 const port = 3001;
@@ -19,7 +20,7 @@ const handlebars = expressHandlebars.create({
 
 app.engine('hbs', handlebars.engine);
 app.set('view engine', 'hbs');
-
+app.use(bodyParser.json())
 
 mongoose.connect('mongodb://127.0.0.1:27017/Verbs', {
   useNewUrlParser: true,
@@ -54,7 +55,24 @@ app.get('/api/date', async (req,res) => {
   res.json(date)
 })
 
+app.post('/registerUser', (req,res) => {
+  const {name,password,email} = req.body;
 
+  const user = {
+    name: name,
+    password: password,
+    email: email
+  }
+
+  res.json({success: true})
+
+
+  UserForm.collection.insertOne(user).then(() => {
+    console.log('yes')
+  }).catch(err => {
+    console.error(err)
+  })
+})
 
 app.listen(port, () => {
     console.log(`server run ${port}`)
