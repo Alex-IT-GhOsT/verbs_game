@@ -52,8 +52,6 @@ app.get('/', (req, res) => {
 app.get('/api/date', async (req,res) => {
   const date = await Verb.find({})
   res.json(date)
-    
- 
 })
 
 

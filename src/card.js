@@ -13,21 +13,15 @@ const Card = () => {
     const [end, setEnd] = useState(true)
     const [knowQuest, setKnowQuest] = useState([])
     const [hiddenBtn, setHiddenBtn] = useState(true)
+    
+    
 
   
     const getInfFromServer = () => {
         fetch('http://localhost:3001/api/date')
             .then(response => response.json())
             .then(data => {
-                const know = JSON.parse(localStorage.getItem('know'))
-                if (know !== null) {
-                    const filter = data.filter((_, index) => !know.includes(index))
-                    console.log(filter)
-                    setQuest(filter);
-                } else {
-                    setQuest(data)
-                }
-                
+                setQuest(data)
                 setQuestSave(data);
             })
             .catch(error => {
@@ -39,28 +33,29 @@ const Card = () => {
 
     console.log(knowQuest)
 
+    
+
     const handleShowAnswer = () => {
         setShowAnswer(true)
-        setNoAnsweredQuestions([...noAnsweredQuestions,currentInd])
         setHiddenBtn(false)
-        setCurrentInd((prev) => prev === quest.length - 1 ? 0 : prev + 1)
-        localStorage.setItem('dontKnow',JSON.stringify([...noAnsweredQuestions,currentInd]))  
+        
     }
 
-    const handleNextQuest = () => {
+    const handleNextQuest = (questionId) => {
+            setCurrentInd((prev) => prev === quest.length - 1 ? 0 : prev + 1)
+            setKnowQuest([...knowQuest, questionId])
+            localStorage.setItem('knowQuest',JSON.stringify([...knowQuest, questionId]))
+    }
+
+    const handleOk = (questionId) => {
         if (currentInd < quest.length -1) {
+            setHiddenBtn(true)
             setShowAnswer(false)
             setCurrentInd((prev) => prev === quest.length - 1 ? 0 : prev + 1)
-            setKnowQuest([...knowQuest, quest._id])
-            localStorage.setItem('know', JSON.stringify([...knowQuest,currentInd]))
-        } else {
-            setEnd(false)
+            setNoAnsweredQuestions([...noAnsweredQuestions, questionId])
+            localStorage.setItem('noQuest',JSON.stringify([...noAnsweredQuestions, questionId]))
+           
         }
-    }
-
-    const handleOk = () => {
-        setShowAnswer(false)
-        setHiddenBtn(true)
     }
 
     console.log(noAnsweredQuestions)
@@ -75,11 +70,11 @@ const Card = () => {
 
     
 
-    console.log('не знаю',localStorage.getItem('dontKnow'))
-    console.log('знаю',localStorage.getItem('know'))
+    console.log('не знаю',localStorage.getItem('noQuest'))
+    console.log('знаю',localStorage.getItem('knowQuest'))
   
-    //localStorage.removeItem('dontKnow')
-    //localStorage.removeItem('know')
+    //localStorage.removeItem('noQuest')
+    //localStorage.removeItem('knowQuest')
 
   
     
@@ -87,25 +82,27 @@ const Card = () => {
         <div>
             <button className="btn btn-primary" onClick={getInfFromServer}>Получить карту</button>
         </div>
-        {end && quest.length > 0 && (
-            <div className="card">
-                <div className="card-body">
-                    <h5 className="card-title">English: {quest[currentInd].eng}</h5>
-                    {showAnswer && <>
-                        <p className="card-text">Russian: {quest[currentInd].rus}</p>
-                        <button className="btn btn-success" onClick={handleOk}>ок</button>
-                    </>
-                    }
-                    {hiddenBtn && 
-                    <button className="btn btn-success" onClick={handleNextQuest}>знаю</button>
-                    }
-                    
-                    {!showAnswer && 
+        {end && quest.map((elem,ind) => {
+            return <div key={elem._id}>
+                {ind === currentInd ?
+                <>
+                <h5>{elem.eng}</h5>
+                {showAnswer && <>
+                    <p className="card-text">Russian: {elem.rus}</p>
+                    <button className="btn btn-success" onClick={() => handleOk(elem._id)}>ок</button>
+                </>}
+                {hiddenBtn && 
+                    <button className="btn btn-success" onClick={() => handleNextQuest(elem._id)}>знаю</button>
+                }
+                {!showAnswer && 
                         <button className="btn btn-danger" onClick={handleShowAnswer}>не знаю</button>
-                    }
-                </div>
-        </div>
-        )}
+                }
+                </>
+                :
+                null
+            }
+            </div>
+        })}
         {!end && 
             <div>
                 <p>Вопросов больше нет</p>
