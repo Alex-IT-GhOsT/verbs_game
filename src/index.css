@@ -11,3 +11,46 @@ code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
     monospace;
 }
+
+
+.form-signin{
+  max-width: 330px;
+}
+
+.btn-block{
+  display: block;
+  width: 100%;
+}
+
+.link {
+  text-decoration: none;
+}
+
+.blockButton {
+  display: flex;
+  justify-content: space-between;
+}
+
+.block{
+  display: flex;
+  justify-content: center;
+}
+
+.rotate{
+  transform: rotateY(180deg);
+  transition: 1s;
+}
+
+
+.block{
+  display: flex;
+  flex-wrap: wrap;
+}
+
+.mainBlock{
+  background: url(https://bogatyr.club/uploads/posts/2023-03/1679587199_bogatyr-club-p-fon-dlya-prezentatsii-angliya-krasivo-1.jpg);
+  height: 100vh;
+  background-size: cover;
+  background-position: center;
+  
+}

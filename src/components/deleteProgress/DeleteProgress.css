@@ -1,0 +1,35 @@
+.modalBlock{
+    display: block;
+    border: 1px solid;
+    border-radius: 5px;
+    width: 500px;
+    height: 70px;
+    text-align: center;
+    background-color: white;
+}
+
+.mainBlockModal{
+    display: flex;
+    justify-content: center;    
+}
+
+.btnBlock{
+    display: flex;
+    justify-content: space-around;
+}
+
+.closeBlock{
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    
+}
+
+.title{
+    flex: 11;
+}
+
+.modalBlockMain{
+    display: flex;
+    justify-content: center;
+}
